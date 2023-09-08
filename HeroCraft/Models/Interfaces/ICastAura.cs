@@ -8,5 +8,5 @@ namespace HeroCraft.Models.Interfaces;
 
 public interface ICastAura
 {
-    void CastAura();
+    string CastAura();
 }

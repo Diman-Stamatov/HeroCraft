@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace HeroCraft.Models.HeroClasses.Roles
 {
-    public enum Role
+    public enum RoleType
     {
         Healer,
         DamageDealer        
