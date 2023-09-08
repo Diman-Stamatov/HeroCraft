@@ -127,6 +127,4 @@ internal class Program
         }
         Console.WriteLine(appOutput.ToString());
     }
-
-    
 }

@@ -37,8 +37,7 @@ public abstract class Hero : ICastAura, ICastShield
         Health = Convert.ToInt32(Health * ShieldPower);        
         string auraMessage = $"{this.GetType().Name} {Name} cast a shield, which raised the hero's health to {Health}!";
         return auraMessage;
-    }
-    
+    }    
     public string CastAbility(Hero target)
     {
         if (Dead)
@@ -57,7 +56,6 @@ public abstract class Hero : ICastAura, ICastShield
             return Heal(target);     
         }
     }
-
     private string DealDamage(Hero target)
     {        
         if (target.Dead)
@@ -94,7 +92,6 @@ public abstract class Hero : ICastAura, ICastShield
 
         return abilityResult.ToString();
     }
-
     private string Heal(Hero target) 
     {
         if (target.Dead)
