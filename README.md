@@ -1,3 +1,6 @@
-# Get SWITFy
+# HeroCraft
+HeroCraft is a small console application that lets you create heroes of with one of four classes and do battle with them. 
+You can either input commands directly into the console yourself, 
+input the "Demonstrate" command to see the result ot a predetermined set of commands, 
+or input the "Randomize" command, which generates a series of random commands.
 
-Get SWIFTy is a Web API that reads Swift MT799 messages and saves the data in an SQLite database. It uses Swagger for its documentation and for testing purposes.
