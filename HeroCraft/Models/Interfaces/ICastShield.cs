@@ -8,5 +8,5 @@ namespace HeroCraft.Models.Interfaces;
 
 public interface ICastShield
 {
-    void CastShield();
+    string CastShield();
 }

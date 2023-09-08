@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using static HeroCraft.Models.HeroClasses.Roles.Role;
+using static HeroCraft.Models.HeroClasses.Roles.RoleType;
 
 namespace HeroCraft.Models.HeroClasses;
 
@@ -18,91 +18,104 @@ public abstract class Hero : ICastAura, ICastShield
     public int Health { get; set; }
     public int MaxHealth { get; set; }
     public int SpellPower { get; set; }
-    public Role Role { get; set; }
+    public double ShieldPower { get;set; }
+    public double AuraPower { get; set; }
+    public RoleType Role { get; set; }
     public bool Dead { get; set; }
     protected Hero(string name)
     {
-        this.Name = name;
-        this.Health = this.MaxHealth = 120;
-        this.SpellPower = 90;
+        Name = name;
+        Health = MaxHealth = 120;
+        SpellPower = 90;
     }
     
-    public virtual void CastAura()
+    public string CastAura()
     {
-        string auraMessage = $"{this.Name} cast an aura, resulting in a total of {this.SpellPower} ability power!";
-        Console.WriteLine(auraMessage);
+        SpellPower = Convert.ToInt32(SpellPower * AuraPower);
+        string auraMessage = $"{Name} cast an aura, resulting in a total of {SpellPower} ability power!";
+        return auraMessage;
     }
-    public virtual void CastShield()
+    public string CastShield()
     {
-        string auraMessage = $"{this.Name} cast a shield, resulting in a total of {this.Health} health!";
-        Console.WriteLine(auraMessage);
+        Health = Convert.ToInt32(Health * ShieldPower);
+        string auraMessage = $"{Name} cast a shield, resulting in a total of {Health} health!";
+        return auraMessage;
     }
     
-    public virtual void CastAbility(Hero target)
+    public string CastAbility(Hero target)
     {
-        if (this.Dead)
+        if (Dead)
         {
-            string className = this.GetType().Name;
-            Console.WriteLine($"{this.Name} is dead, how did that {className} get a turn?");
-            return;
+            string className = GetType().Name;
+            string deadHeroMessage = $"{Name} is dead, how did that {className} get a turn?";
+            return deadHeroMessage;
         }
 
-        if (this.Role == DamageDealer) 
+        if (Role == DamageDealer) 
         {
-            DealDamage(target);
+            return DealDamage(target);
         }
         else
         {
-            Heal(target);     
+            return Heal(target);     
         }
     }
 
-    private void DealDamage(Hero target)
+    private string DealDamage(Hero target)
     {        
         if (target.Dead)
         {
-            Console.WriteLine($"Stop! Stop! {target.Name} is already dead!");
-            return;
+            string deatTargetMessage = $"Stop! Stop! {target.Name} is already dead!";            
+            return deatTargetMessage;
         }
 
-        string className = this.GetType().Name;
+        string className = GetType().Name;
         string targetClassName = target.GetType().Name;
+        var abilityResult = new StringBuilder();
 
         target.Health -= SpellPower;
-        Console.WriteLine(string.Format(DamageMessage, className, Name, target.Name, SpellPower));
+        abilityResult.AppendLine(string.Format(DamageMessage, className, Name, target.Name, SpellPower));
         if (target.Health <= 0)
         {
             target.Dead = true;
-            Console.WriteLine($"{targetClassName} {target.Name} died!");
+            string targetDiedMessage = $"{targetClassName} {target.Name} died!";
+            abilityResult.AppendLine(targetDiedMessage);
         }
         else if (target.Health > 1 && target.Health < 10)
         {
-            Console.WriteLine($"{targetClassName} {target.Name} is low on health! Healers, handle it!");
+            string lowHealthMessage = $"{targetClassName} {target.Name} is low on health! Healers, handle it!";
+            abilityResult.AppendLine(lowHealthMessage);
         }
+        return abilityResult.ToString();
     }
 
-    private void Heal(Hero target) 
+    private string Heal(Hero target) 
     {
         if (target.Dead)
         {
-            Console.WriteLine($"It's a bit late to heal {target.Name}. Too bad you never finished that Resurection spell quest.");
-            return;
+            string deadTargetMessage = $"It's a bit late to heal {target.Name}. " +
+                $"Too bad you never finished that Resurection spell quest...";
+            return deadTargetMessage;
         }
 
-        string className = this.GetType().Name;
+        string className = GetType().Name;
         string targetClassName = target.GetType().Name;
+        var abilityResult = new StringBuilder();
 
         target.Health += SpellPower;
-        Console.WriteLine(string.Format(HealingMessage, className, Name, target.Name, SpellPower));
+        abilityResult.AppendLine(string.Format(HealingMessage, className, Name, target.Name, SpellPower));
         if (target.Health == target.MaxHealth)
         {
-            Console.WriteLine($"{targetClassName} {target.Name} was fully healed!");
+            string message = $"{targetClassName} {target.Name} was fully healed!";
+            abilityResult.AppendLine(message);
         }
         else if (target.Health > target.MaxHealth)
         {
             int difference = target.Health - target.MaxHealth;
             target.Health = target.MaxHealth;
-            Console.WriteLine($"{targetClassName} {target.Name} was overhealed for {difference}!");
+            string message = $"{targetClassName} {target.Name} was overhealed for {difference}!";
+            abilityResult.AppendLine(message);
         }
+        return abilityResult.ToString();
     }
 }
